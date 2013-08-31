@@ -1,1 +1,1 @@
-from folder_as_markdown import *
+from .folder_as_markdown import *
