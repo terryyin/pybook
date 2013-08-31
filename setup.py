@@ -5,11 +5,15 @@
 import py_book
 from distutils.core import setup
 def install():
+    try:
+        long_description = open("README.md").read()
+    except:
+        long_description = py_book.__doc__    
     setup(
           name = 'pybook',
           version = py_book.VERSION,
           description =  py_book.__doc__, 
-          long_description =  open("README.md").read(),
+          long_description =  long_description,
           url = 'https://github.com/terryyin/pybook',
           classifiers = ['Development Status :: 1 - Planning',
                      'Intended Audience :: End Users/Desktop',
@@ -25,6 +29,7 @@ def install():
                      'Programming Language :: Python :: 3.3'],
           package_dir = {'pybook':'py_book'},
           packages = ['pybook'],
+          install_requires=['markdown'],
           author = 'Terry Yin',
           author_email = 'terry@odd-e.com',
           scripts=['pybook']
