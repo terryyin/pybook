@@ -17,7 +17,7 @@ class TestConvertFileAndFolder(unittest.TestCase):
 
     @patch('py_book.open', create=True)
     def test_convert_MD_file_into_html(self, mock_open):
-        mock_open.return_value = MagicMock(spec=file)
+        mock_open.return_value = MagicMock()
         file_handle = mock_open.return_value.__enter__.return_value
         file_handle.read.return_value = "#ABC"
         
