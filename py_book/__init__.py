@@ -14,8 +14,15 @@ import types
 from .markdown_extensions import PybookMarkdownExtension
 
 
+
+def is_node(sources):
+    try:
+        return isinstance(sources, types.StringTypes)
+    except NameError:
+        return isinstance(sources, str)
+
 def _from_source_tree_to_markdown_with_session(sources, md):
-    if isinstance(sources, types.StringTypes):
+    if is_node(sources):
         return md.convert(sources)
     return '\n'.join(_from_source_tree_to_markdown_with_session(source, md) for source in sources)
 
