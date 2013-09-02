@@ -8,7 +8,7 @@ from py_book import to_html
 
 @patch("os.path.isfile", create=True)
 @patch.object(os, 'listdir')
-@patch('py_book.open', create=True)
+@patch('codecs.open', create=True)
 class TestConvertFileAndFolder(unittest.TestCase):
     ''' pybook should be able to convert both md File and
         folder into HTML.
@@ -29,7 +29,7 @@ class TestConvertFileAndFolder(unittest.TestCase):
 
         html = to_html("/path/to/markdown.md")
 
-        mock_open.assert_called_with("/path/to/markdown.md", 'r')
+        mock_open.assert_called_with("/path/to/markdown.md", 'r', encoding='utf-8')
         self.assertEqual("<h1>ABC</h1>", html)
 
 
@@ -42,11 +42,13 @@ class TestConvertFileAndFolder(unittest.TestCase):
 
         html = to_html("/path/to/folder")
 
-        mock_open.assert_called_with("/path/to/folder/a.md", 'r')
+        mock_open.assert_called_with("/path/to/folder/a.md", 'r', encoding='utf-8')
         self.assertEqual("<h1>ABC</h1>", html)
 
 
     def test_convert_folder_with_no_init_file(self, mock_open, mock_listdir, mock_isfile):
+        ''' Should combine files in alphabetical order.
+        '''
         mock_isfile.side_effect = [False, True, True]
         mock_listdir.return_value = ['b.md', 'a.md']
         mock_open.return_value = MagicMock()
@@ -56,6 +58,6 @@ class TestConvertFileAndFolder(unittest.TestCase):
         html = to_html("/path/to/folder")
 
         self.assertEqual(mock_open.call_args_list, 
-                         [call("/path/to/folder/a.md", "r"), 
-                          call("/path/to/folder/b.md", "r")])
+                         [call("/path/to/folder/a.md", "r", encoding='utf-8'), 
+                          call("/path/to/folder/b.md", "r", encoding='utf-8')])
         self.assertEqual("<h1>A</h1>\n<h1>B</h1>", html)
