@@ -34,7 +34,7 @@ def _compare_filename(a, b):
     return (a > b) - (a < b) if a.startswith('_') == b.startswith('_') else [1, -1][a.startswith('_')]
 
 
-_sort_dir_entries = lambda(direntries): direntries.sort(cmp=_compare_filename)
+_sort_dir_entries = lambda direntries: direntries.sort(cmp=_compare_filename)
 try:
     # Python 2.x?
     _sort_dir_entries([])
@@ -58,7 +58,7 @@ except:
             def __ne__(self, other):
                 return mycmp(self.obj, other.obj) != 0
         return K
-    _sort_dir_entries = lambda(direntries): direntries.sort(key=cmp_to_key(_compare_filename))
+    _sort_dir_entries = lambda direntries: direntries.sort(key=cmp_to_key(_compare_filename))
 
 
 def load_folder(pathnames):
