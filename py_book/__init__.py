@@ -10,36 +10,36 @@ except:
     print ("You need to install Python markdown module.")
 import os
 import codecs
+import types
+from markdown_extensions import PybookMarkdownExtension
 
 
-class Markdown_Source_Tree(object):
-    
-    def __init__(self, pathname):
-        self.pathname = pathname
+def _from_source_tree_to_markdown_with_session(sources, md):
+    if isinstance(sources, types.StringTypes):
+        return md.convert(sources)
+    return '\n'.join(_from_source_tree_to_markdown_with_session(source, md) for source in sources)
 
-    def _is_node(self):
-        return os.path.isfile(self.pathname)
-    
-    def _get_source(self):
-        with codecs.open(self.pathname, 'r', encoding="utf-8") as md_file:
-            return md_file.read()
-    
-    def _get_children(self):
-        direntries = os.listdir(self.pathname)
-        direntries.sort()
-        return list(Markdown_Source_Tree(os.path.join(self.pathname, entry)) for entry in direntries)
+def from_source_tree_to_markdown(sources):
+    md = markdown.Markdown(extensions = ['meta', PybookMarkdownExtension()])
+    return _from_source_tree_to_markdown_with_session(sources, md)
 
-    def combine_source_tree(self):
-        if self._is_node():
-            return self._get_source()
-        return '\n'.join(child.combine_source_tree() for child in self._get_children())
+
+def load_folder(pathnames):
+    for pathname in pathnames:
+        if os.path.isfile(pathname):
+            with codecs.open(pathname, 'r', encoding="utf-8") as md_file:
+                yield md_file.read()
+        else:
+            direntries = os.listdir(pathname)
+            direntries.sort()
+            yield load_folder(os.path.join(pathname, entry) for entry in direntries)
 
 
 def to_html(pathname):
     ''' Convert a folder or a md file into HTML.
     '''
-    source_tree = Markdown_Source_Tree(pathname)
-    return markdown.markdown(source_tree.combine_source_tree())
+    sources = load_folder([pathname])
+    return from_source_tree_to_markdown(sources)
 
 
 def create_option_parser():
