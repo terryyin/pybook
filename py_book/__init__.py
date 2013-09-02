@@ -18,7 +18,7 @@ from .markdown_extensions import PybookMarkdownExtension
 def is_node(sources):
     try:
         return isinstance(sources, types.StringTypes)
-    except NameError:
+    except AttributeError:
         return isinstance(sources, str)
 
 def _from_source_tree_to_markdown_with_session(sources, md):

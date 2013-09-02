@@ -7,8 +7,8 @@ A tool for writing book in markdown.
 Status | Feature
 ------ | --------
 Done | ~~Combine all md in a folder and convert to HTML~~
-WIP | \Use meta to add chapters automatically.
-    | \__init__.md can include other markdown tree in the folder
+Done | ~~Use meta to add chapter prefix automatically.~~
+WIP | Add section prefix
     | generate TOC
     | add TOC command to markdown
     | Link sentence in a book to a unit test to test if that statement is still true.
