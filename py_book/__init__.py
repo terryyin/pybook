@@ -11,7 +11,7 @@ except:
 import os
 import codecs
 import types
-from markdown_extensions import PybookMarkdownExtension
+from .markdown_extensions import PybookMarkdownExtension
 
 
 def _from_source_tree_to_markdown_with_session(sources, md):
