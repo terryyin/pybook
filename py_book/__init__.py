@@ -24,6 +24,10 @@ def from_source_tree_to_markdown(sources):
     return _from_source_tree_to_markdown_with_session(sources, md)
 
 
+def _compare_filename(a, b):
+    return cmp(a, b) if a.startswith('_') == b.startswith('_') else [1, -1][a.startswith('_')]
+
+
 def load_folder(pathnames):
     for pathname in pathnames:
         if os.path.isfile(pathname):
@@ -31,7 +35,7 @@ def load_folder(pathnames):
                 yield md_file.read()
         else:
             direntries = os.listdir(pathname)
-            direntries.sort()
+            direntries.sort(cmp = _compare_filename)
             yield load_folder(os.path.join(pathname, entry) for entry in direntries)
 
 

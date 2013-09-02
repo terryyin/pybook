@@ -13,13 +13,6 @@ class TestConvertFileAndFolder(unittest.TestCase):
     ''' pybook should be able to convert both md File and
         folder into HTML.
     '''
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
 
     def test_convert_md_file(self, mock_open, _, mock_isfile):
         mock_isfile.return_value = True
@@ -51,13 +44,20 @@ class TestConvertFileAndFolder(unittest.TestCase):
         '''
         mock_isfile.side_effect = [False, True, True]
         mock_listdir.return_value = ['b.md', 'a.md']
-        mock_open.return_value = MagicMock()
-        file_handle = mock_open.return_value.__enter__.return_value
-        file_handle.read.side_effect = ["#A", "#B"]
 
-        html = to_html("/path/to/folder")
+        to_html("/path/to/folder")
 
         self.assertEqual(mock_open.call_args_list, 
                          [call("/path/to/folder/a.md", "r", encoding='utf-8'), 
                           call("/path/to/folder/b.md", "r", encoding='utf-8')])
-        self.assertEqual("<h1>A</h1>\n<h1>B</h1>", html)
+
+
+    def test_convert_folder_with_underscore_filename(self, mock_open, mock_listdir, mock_isfile):
+        mock_isfile.side_effect = [False, True, True]
+        mock_listdir.return_value = ['0.md', '_0.md']
+
+        to_html("/path/to/folder")
+
+        self.assertEqual(mock_open.call_args_list, 
+                         [call("/path/to/folder/_0.md", "r", encoding='utf-8'), 
+                          call("/path/to/folder/0.md", "r", encoding='utf-8')])
