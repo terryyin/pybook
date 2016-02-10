@@ -1,12 +1,18 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
-  - "3.3"
-install: 
-  - pip install markdown
-  - python setup.py install
+  - "3.4"
+  - "3.5"
+
+install:
+  - pip install lizard
+
+before_script:
+  - mkdir ./projects/
+  - (cd projects && git clone https://github.com/andrewrk/zig.git)
 
 script:
-  - make
-
+  - lizard --version
+  - lizard --help
+  - lizard projects/zig/src/analyze.cpp
+  - lizard -lcpp projects/zig/src/analyze.cpp
