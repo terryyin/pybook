@@ -7,12 +7,5 @@ python:
 install:
   - pip install lizard
 
-before_script:
-  - mkdir ./projects/
-  - (cd projects && git clone https://github.com/andrewrk/zig.git)
-
 script:
-  - lizard --version
-  - lizard --help
-  - lizard projects/zig/src/analyze.cpp
-  - lizard -lcpp projects/zig/src/analyze.cpp
+  - python testlizard.py
