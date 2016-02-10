@@ -1,2 +1,2 @@
-void f() {}
+void f(){}
 
