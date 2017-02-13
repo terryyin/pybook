@@ -1,4 +1,4 @@
-from lizard import analyze, preprocessing, CLikeReader, FileInfoBuilder
+from lizard import analyze, preprocessing, CLikeReader, FileInfoBuilder, get_reader_for
 
 r = analyze(["c.cpp"], None, 1, [preprocessing])
 for i in r:
@@ -8,9 +8,11 @@ for i in r:
 
 def analyze_source_code(filename):
     context = FileInfoBuilder(filename)
-    reader = CLikeReader(context)
+    reader = (get_reader_for(filename) or CLikeReader)(context)
+    print reader
     with open(filename) as f:
         tokens = reader.generate_tokens(f.read())
+    print tokens
     for _ in reader(tokens, reader):
         pass
     return context.fileinfo
